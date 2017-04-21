@@ -17,20 +17,14 @@ def accuracy(acc, file):
     for label in acc.keys():
         values = []
         for key in acc[label]:
-            if key == label or key == '<correct>' or key == 'standard':
-                acc_total[0] += acc[label][key]
-            else:
-                acc_total[1] += acc[label][key]
+            index = 0 if (key == label or key == '<correct>' or key == 'standard') else 1
+            acc_total[index] += acc[label][key]
             values.append((key, acc[label][key]))
-        values = sorted(values, key=lambda x:x[1], reverse=True)
+        values = sorted(values, key=lambda x: x[1], reverse=True)
         sorted_acc[label] = values
 
     # Print out accuracy results
-    try:
-        accuracy = acc_total[0]/(float(acc_total[0]+acc_total[1]))
-    except:
-        accuracy = 0.0
-    writer.write('Accuracy: ' + str(accuracy) + '\n\n')
+    writer.write('Accuracy: ' + str(0.0 if sum(acc_total) else acc_total[0] / sum(acc_total)) + '\n\n')
 
     # Process for each label
     for label in sorted(sorted_acc.keys()):
